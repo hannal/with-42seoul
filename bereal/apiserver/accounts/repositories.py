@@ -15,7 +15,11 @@ class Repository:
         return Path(self._storage).resolve()
 
     def _load_storage(self) -> list[dict]:
-        with open(self._storage, 'w+') as fp:
+        if not self._storage_path.exists():
+            self._storage_path.write_text('[]')
+            return []
+
+        with self._storage_path.open('r+') as fp:
             data = fp.read()
             if not data:
                 return []
@@ -30,6 +34,12 @@ class Repository:
 
         data = self._load_storage()
         data.append(payload)
-        with open(self._storage, 'w') as fp:
+        with self._storage_path.open('w+') as fp:
             fp.write(json.dumps(data))
         return payload
+
+    def find_by_username(self, username: str):
+        data = self._load_storage()
+        for _v in data:
+            if _v.get('username') == username:
+                return _v
