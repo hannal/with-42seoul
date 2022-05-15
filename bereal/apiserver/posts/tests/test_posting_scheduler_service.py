@@ -19,6 +19,7 @@ def test_정해진_시간_마다_무작위로_이용자를_선택하여_게시�
 
     # When : 기준 시간에 게시물 작성 알림기가 실행되면
     notifier = Notifier(target_time)
+    notifier.collect_users_to_notify()
     notifier.notify()
 
     # Then : 게시물 작성 알림을 받고, 게시물 작성 제한 시간이 기록된다.
