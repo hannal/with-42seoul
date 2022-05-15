@@ -16,6 +16,7 @@ def test_정해진_시간_마다_무작위로_이용자를_선택하여_게시�
     post_repository = PostRepository(Post)
 
     # Given : 게시물 작성 시간대이 기준 시간을 포함하는 이용자 a는
+    limit_hour = 1
     target_time = timezone.localtime()
     expected_users: list[User] = [
         UserFactory(),
@@ -34,7 +35,7 @@ def test_정해진_시간_마다_무작위로_이용자를_선택하여_게시�
     # When : 기준 시간에 게시물 작성 알림기가 실행되면
     notifier = Notifier(target_time, user_repository, post_repository)
     notifier.collect_users_to_notify()
-    notifier.notify()
+    notifier.notify(limit_hour)
 
     # Then : 게시물 작성 알림을 받고,
     result = set([_o.username for _o in notifier.success_users])

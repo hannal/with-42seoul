@@ -44,10 +44,10 @@ class Notifier:
             return
         self._users = self._user_repository.collect_users_to_notify(self.target_time)
 
-    def notify(self):
+    def notify(self, limit_hour: int):
         self._success_users = []
         for _o in self.users:
-            _time = timezone.localtime()
+            _time = timezone.localtime() + datetime.timedelta(hours=limit_hour)
             if not self._repository.has_timelimited_post(_o, _time):
                 self._repository.create_timelimited_post(_o, _time)
             self._success_users.append(_o)
