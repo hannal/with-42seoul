@@ -26,7 +26,7 @@ class Repository:
             return json.loads(data)
 
     def unlink_storage(self):
-        self._storage_path.unlink()
+        self._storage_path.unlink(True)
 
     def create(self, payload: dict):
         if not payload:
