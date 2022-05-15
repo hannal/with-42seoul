@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 from accounts.tests.factories import UserFactory
+from accounts.repositories import DBRepository
 from posts.services import Notifier
 
 
@@ -18,7 +19,7 @@ def test_정해진_시간_마다_무작위로_이용자를_선택하여_게시�
     ]
 
     # When : 기준 시간에 게시물 작성 알림기가 실행되면
-    notifier = Notifier(target_time)
+    notifier = Notifier(target_time, DBRepository())
     notifier.collect_users_to_notify()
     notifier.notify()
 

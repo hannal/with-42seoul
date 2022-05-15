@@ -1,5 +1,6 @@
 import typing as t
 import json
+import datetime
 from pathlib import Path
 
 from django.contrib.auth import get_user_model
@@ -14,6 +15,9 @@ class BaseRepository:
         raise NotImplementedError
 
     def find_by_username(self, username: str):
+        raise NotImplementedError
+
+    def collect_users_to_notify(self, target_time: datetime.datetime):
         raise NotImplementedError
 
 
@@ -59,6 +63,9 @@ class FileRepository(BaseRepository):
             if _v.get('username') == username:
                 return _v
 
+    def collect_users_to_notify(self, target_time: datetime.datetime):
+        return []
+
 
 class DBRepository(BaseRepository):
     model: Model = None
@@ -77,3 +84,6 @@ class DBRepository(BaseRepository):
 
     def find_by_username(self, username: str):
         return self.queryset.filter(username=username).first()
+
+    def collect_users_to_notify(self, target_time: datetime.datetime):
+        return self.queryset.filter()
