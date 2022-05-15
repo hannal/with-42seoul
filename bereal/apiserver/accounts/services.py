@@ -1,8 +1,7 @@
 from accounts.repositories import Repository
 
 
-def signup(payload: dict):
-    repository = Repository()
+def signup(payload: dict, repository: Repository) -> dict:
     account = repository.create({
         'username': payload['username'],
         'password': payload['password'],
