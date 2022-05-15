@@ -1,6 +1,6 @@
 import pytest
 
-from accounts.repositories import Repository
+from accounts.views import Repository
 
 
 @pytest.fixture
@@ -12,6 +12,7 @@ def fixtures():
     repository.unlink_storage()
 
 
+@pytest.mark.django_db
 def test_회원가입_성공_api(tp_api, fixtures):
     url = '/signup/'
     payload = {
