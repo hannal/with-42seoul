@@ -1,8 +1,23 @@
+import typing as t
 import json
 from pathlib import Path
 
+from django.contrib.auth import get_user_model
+from django.db.models import Model
 
-class Repository:
+
+class BaseRepository:
+    def unlink_storage(self):
+        pass
+
+    def create(self, payload: dict):
+        raise NotImplementedError
+
+    def find_by_username(self, username: str):
+        raise NotImplementedError
+
+
+class FileRepository(BaseRepository):
     _storage = None
 
     def __init__(self, storage: str = None):
@@ -43,3 +58,22 @@ class Repository:
         for _v in data:
             if _v.get('username') == username:
                 return _v
+
+
+class DBRepository(BaseRepository):
+    model: Model = None
+
+    def __init__(self, model: t.Optional[Model] = None):
+        if not model:
+            model = get_user_model()
+        self.model = model
+
+    @property
+    def queryset(self, *args, **kwargs):
+        return self.model.objects.filter(*args, **kwargs)
+
+    def create(self, payload: dict):
+        return self.model.objects.create_user(**payload)
+
+    def find_by_username(self, username: str):
+        return self.queryset.filter(username=username).first()
