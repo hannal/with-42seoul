@@ -86,4 +86,8 @@ class DBRepository(BaseRepository):
         return self.queryset.filter(username=username).first()
 
     def collect_users_to_notify(self, target_time: datetime.datetime):
-        return self.queryset.filter()
+        _time = target_time.time()
+        return self.queryset.filter(
+            postingschedule__from_hour__lte=_time,
+            postingschedule__to_hour__gt=_time,
+        )

@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from accounts.tests.factories import UserFactory
 from accounts.repositories import DBRepository
 from posts.services import Notifier
+from posts.tests.factories import PostingScheduleFactory
 
 
 @pytest.mark.django_db
@@ -13,6 +14,13 @@ def test_정해진_시간_마다_무작위로_이용자를_선택하여_게시�
     target_time = timezone.localtime()
     expected_users: list[User] = [
         UserFactory(),
+    ]
+    [
+        PostingScheduleFactory(
+            user=_o,
+            from_hour=target_time.time(),
+        )
+        for _o in expected_users
     ]
     not_expected_users: list[User] = [
         UserFactory(),
@@ -26,4 +34,6 @@ def test_정해진_시간_마다_무작위로_이용자를_선택하여_게시�
     # Then : 게시물 작성 알림을 받고, 게시물 작성 제한 시간이 기록된다.
     result = set([_o.username for _o in notifier.success_users])
     expected = set([_o.username for _o in expected_users])
+    not_expected = set([_o.username for _o in not_expected_users])
     assert result == expected
+    assert not (result & not_expected)
