@@ -1,7 +1,7 @@
-from accounts.repositories import BaseRepository
+from accounts.repositories import RepositoryType
 
 
-def signup(payload: dict, repository: BaseRepository) -> dict:
+def signup(payload: dict, repository: RepositoryType) -> dict:
     account = repository.find_by_username(payload['username'])
     if account:
         return {

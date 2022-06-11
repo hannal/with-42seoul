@@ -7,6 +7,13 @@ from django.contrib.auth import get_user_model
 from django.db.models import Model
 
 
+__all__ = [
+    'FileRepository',
+    'DBRepository',
+    'RepositoryType',
+]
+
+
 class BaseRepository:
     def unlink_storage(self):
         pass
@@ -91,3 +98,6 @@ class DBRepository(BaseRepository):
             postingschedule__from_hour__lte=_time,
             postingschedule__to_hour__gt=_time,
         )
+
+
+RepositoryType = t.Union[FileRepository, DBRepository]
