@@ -1,7 +1,0 @@
--r requirements.txt
-pytest
-pytest-django
-django-test-plus
-factory_boy
-flake8
-black==22.3.0

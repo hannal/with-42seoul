@@ -1,3 +1,49 @@
+[tool.poetry]
+name = "42seoul-session-bereal"
+version = "0.1.0"
+description = "42Seoul 특강, bereal 프로젝트 만들기"
+authors = [
+    "Hannal <kay@hannal.net>",
+    "Kay Cha <k.cha@iamdt.co.kr>",
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "~3.2.7"
+djangorestframework = "~3.12.4"
+django-filter = "~21.1"
+python-dateutil = "~2.8.2"
+django-cors-headers = "~3.10.0"
+
+[tool.poetry.dev-dependencies]
+factory-boy = "~3.2.1"
+pytest = "^7.0"
+pytest-django = "^4.5.2"
+pytest-env = "^0.6.2"
+django-test-plus = "^2.2.0"
+flake8 = "^4.0"
+black = "~22.3.0"
+
+[virtualenvs]
+create = true
+in-project = true
+path = ".venv"
+
+[tool.pytest.ini_options]
+testpaths = "tests"
+python_files = ["tests.py", "test_*.py"]
+addopts = '''
+  --nomigrations
+  --reuse-db
+'''
+env = [
+    "DJANGO_SETTINGS_MODULE=apiserver.settings.test",
+]
+filterwarnings = [
+    "error",
+    "ignore::DeprecationWarning:etcd3.*:",
+]
+
 [tool.black]
 line-length = 88
 target-version = ['py310']
