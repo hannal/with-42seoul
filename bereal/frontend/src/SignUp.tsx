@@ -5,6 +5,10 @@ export interface Payload {
   password: string
 }
 
+export interface SignUpSuccess {
+  username: string
+}
+
 interface PropType {
   onSubmit: (data: Payload) => void
 }
@@ -26,9 +30,10 @@ const SignUp: React.FC<PropType> = ({ onSubmit }) => {
 
       <form onSubmit={_onSubmit}>
         <div>
-          <label>아이디</label>
+          <label htmlFor="id-username">아이디</label>
           <input
             data-testid="input-username"
+            id="id-username"
             type="text"
             name="username"
             onChange={(e) => (payload.current.username = e.target.value)}
@@ -36,9 +41,10 @@ const SignUp: React.FC<PropType> = ({ onSubmit }) => {
         </div>
 
         <div>
-          <label>비번</label>
+          <label htmlFor="id-password">비번</label>
           <input
             data-testid="input-passwd"
+            id="id-password"
             type="password"
             name="password"
             onChange={(e) => (payload.current.password = e.target.value)}
