@@ -1,11 +1,11 @@
 import { renderHook, act } from '@testing-library/react-hooks'
 
 import { Payload } from '@/SignUp'
-import { useSignUp } from '@/useSignUp'
+import * as signUpHook from '@/useSignUp'
 
 describe('useSignUp hook', () => {
   it('회원가입 payload가 falsy하면 회원가입 API를 호출하지 않는다.', () => {
-    const { result } = renderHook(() => useSignUp())
+    const { result } = renderHook(() => signUpHook.useSignUp())
     expect(result.current.data).toBeFalsy()
   })
 
@@ -14,10 +14,14 @@ describe('useSignUp hook', () => {
       username: '42seoul',
       password: 'seoul',
     }
+    const mockFetcher = jest.spyOn(signUpHook, 'fetcher').mockResolvedValue({
+      username: payload.username,
+    })
 
-    const hook = renderHook(() => useSignUp(payload))
+    const hook = renderHook(() => signUpHook.useSignUp(payload))
     await hook.waitFor(() => hook.result.current.data !== undefined)
     expect(hook.result.current.data?.username).toEqual(payload.username)
+    expect(mockFetcher).toHaveBeenCalledWith('/signup/')
 
     payload = {
       ...payload,
@@ -28,5 +32,6 @@ describe('useSignUp hook', () => {
     })
     await hook.waitFor(() => hook.result.current.data !== undefined)
     expect(hook.result.current.data?.username).toEqual(payload.username)
+    expect(mockFetcher).toHaveBeenCalledWith('/signup/')
   })
 })
